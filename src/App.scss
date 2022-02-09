@@ -1,0 +1,518 @@
+$fontSize: 5rem;
+$white: #fff;
+$black: #000;
+$pink: #b92169;
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+  color: $white;
+  perspective: 800px;
+  background: rgba(118, 118, 118, 0.7);
+  font-family: Verdana, serif;
+}
+
+.container {
+  max-width: 1920px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+a {
+  transition: color.3s ease;
+  will-change: color;
+  color: $black;
+
+  &:hover {
+    color: $pink;
+  }
+}
+
+h1 {
+  margin: 0;
+  font-size: 28px;
+
+  @media (min-width: 1024px) {
+    font-size: 30px;
+  }
+}
+
+h2 {
+  font-size: 19px;
+
+  @media (min-width: 1024px) {
+    font-size: 25px;
+  }
+}
+
+button {
+  transition: background 0.3s ease;
+  cursor: pointer;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+}
+
+.loading {
+  width: 100%;
+  padding: 10%;
+  text-align: center;
+}
+
+.header {
+  padding: 10px 0;
+  background: rgba(118, 118, 118, 0.7);
+
+  &__logo {
+    a {
+      font-size: 20px;
+      text-decoration: none;
+      text-shadow: -2px -1px 1px $pink;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    color: $pink;
+    text-shadow: 1px 1px 1px $black;
+
+    span {
+      margin-right: 20px;
+    }
+  }
+
+  &__btn {
+    font-size: 14px;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+    padding: 3px 6px;
+    text-decoration: none;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.App {
+  min-height: 100vh;
+  position: relative;
+}
+
+@keyframes circle {
+  from {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+ul,
+ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.login {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+
+  &:before {
+    animation: circle 10s infinite;
+    will-change: transform;
+    content: "";
+    width: 250vw;
+    height: 250vw;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    background: linear-gradient(0deg, $black, $pink);
+    z-index: -1;
+
+    @media (min-width: 1000px) {
+      width: 150vw;
+      height: 150vw;
+    }
+  }
+
+  &__animation {
+    transform-style: preserve-3d;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &__text {
+      position: absolute;
+      font-size: $fontSize;
+      line-height: $fontSize;
+      font-weight: bold;
+      color: $white;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      mix-blend-mode: screen;
+
+      @media (min-width: 600px) {
+        $fontSize: 8rem;
+        font-size: $fontSize;
+        line-height: $fontSize;
+      }
+
+      @for $i from 0 through 100 {
+        $key: $i + 1;
+        &:nth-child(#{$key}) {
+          $row: floor($i / 20);
+          color: rgba(255 - $key * 2, 50 - $key / 2, $key * 3, 1);
+          clip-path: polygon(
+            floor($i / 2) * 10% - $row * 100% $row * 50%,
+            floor($key / 2) *
+              10% -
+              $row *
+              100%
+              ceil($key % 2) *
+              50% +
+              ($row * 50%),
+            ceil($key / 2) * 10% - $row * 100% ($row + 1) * 50%
+          );
+          transform-origin: random(100) -
+            50 +
+            floor($i / 2) *
+            10% -
+            $row *
+            100%
+            random(100) -
+            50 +
+            $row *
+            50%;
+          animation: fly#{$key}
+            5000ms
+            $i *
+            40ms
+            cubic-bezier(0.36, 0.1, 0.16, 1)
+            infinite
+            alternate;
+
+          @keyframes fly#{$key} {
+            $initX: random(1000) - 500;
+            $initY: random(1000) - 500;
+            $initZ: random(1000) - 500;
+            $initDepth: random(3000) - 2500;
+
+            0% {
+              opacity: 0;
+              transform: translate(-50%, -50%) rotateX(#{$initX}deg)
+                rotateY(#{$initY}deg) rotateZ(#{$initZ}deg)
+                translateZ(#{$initDepth}px);
+            }
+
+            10% {
+              opacity: 0;
+              transform: translate(-50%, -50%) rotateX(#{$initX}deg)
+                rotateY(#{$initY}deg) rotateZ(#{$initZ}deg)
+                translateZ(#{$initDepth}px);
+            }
+
+            90% {
+              opacity: 1;
+              transform: translate(-50%, -50%) rotate(0deg) rotateY(0deg)
+                rotateZ(0deg) translateZ(0px);
+            }
+
+            100% {
+              opacity: 1;
+              transform: translate(-50%, -50%) rotate(0deg) rotateY(0deg)
+                rotateZ(0deg) translateZ(0px);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.dashboard {
+  padding: 10px 0;
+
+  &__content {
+    h2 {
+      font-weight: bold;
+      text-shadow: 1px 1px 3px $black;
+      display: block;
+      margin-bottom: 10px;
+      width: 100%;
+      text-transform: capitalize;
+    }
+  }
+
+  &__info {
+    width: 100%;
+
+    @media (min-width: 1024px) {
+      padding: 0 20px;
+      width: calc(100% - 320px);
+    }
+  }
+
+  &__form {
+    padding: 10px;
+    border-radius: 3px;
+    background-color: silver;
+    width: 100%;
+    margin-bottom: 20px;
+
+    @media (min-width: 1024px) {
+      max-width: 320px;
+    }
+
+    &__fields {
+      margin-bottom: 10px;
+    }
+
+    label {
+      cursor: pointer;
+    }
+
+    input {
+      border: 1px solid transparent;
+
+      &:valid {
+        border-color: green;
+      }
+
+      &:not(:valid) {
+        border-color: red;
+      }
+
+      &:not([type="radio"]) {
+        border: none;
+        padding: 3px 5px;
+        width: 100%;
+        border-radius: 3px;
+        margin-bottom: 5px;
+      }
+    }
+
+    button {
+      transition: color 0.3s ease, background 0.3s ease;
+      will-change: color, background;
+      background-color: $pink;
+      text-transform: capitalize;
+      margin-top: 10px;
+      width: 100%;
+
+      &:hover {
+        color: $pink;
+        background-color: $black;
+      }
+    }
+  }
+
+  h1 {
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 1px $black;
+
+    + h2 {
+      color: $pink;
+      text-shadow: 2px 2px 1px $black;
+    }
+  }
+
+  ol,
+  ul {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border-radius: 3px;
+    overflow: hidden;
+    font-size: 13px;
+
+    @media (min-width: 1024px) {
+      font-size: 16px;
+    }
+
+    li {
+      padding: 5px;
+      flex: 1 1 auto;
+      border: 1px solid #000;
+
+      &:not(:last-child) {
+        border-right: none;
+      }
+    }
+  }
+
+  ol {
+    background: $black;
+  }
+
+  ul {
+    li {
+      display: flex;
+      width: 100%;
+      align-items: center;
+
+      &:first-child {
+        span {
+          &:first-letter {
+            text-transform: uppercase;
+          }
+        }
+      }
+
+      &:nth-last-child(2) {
+        button {
+          flex: 1 1 auto;
+          margin: 0 2px;
+
+          &:hover {
+            background-color: crimson;
+          }
+        }
+      }
+
+      &:last-child {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-transform: uppercase;
+        width: auto;
+      }
+
+      &.d {
+        background-color: $pink;
+      }
+
+      &.a {
+        background-color: $white;
+        color: $black;
+      }
+    }
+  }
+
+  .container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 250px;
+  opacity: 0.7;
+  padding: 5px 5px 0;
+  border: 1px solid $white;
+  border-radius: 3px;
+
+  &-confirmation {
+    max-width: 400px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    padding: 25px 20px;
+    border-radius: 3px;
+    background: black;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    h1 {
+      margin-bottom: 25px;
+    }
+
+    button {
+      transition: background 0.3s ease, color 0.3s ease, border 0.3s ease;
+      will-change: color, background;
+      min-width: 100px;
+      margin: 0 5px;
+      border: 1px solid transparent;
+
+      &:first-of-type {
+        background-color: $pink;
+      }
+
+      &:hover {
+        background-color: $black;
+        border-color: $white;
+        color: $white;
+      }
+    }
+  }
+
+  input {
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 3px;
+    background-color: $pink;
+    color: $black;
+    border: none;
+    width: 100%;
+    outline: none;
+
+    &::placeholder {
+      color: black;
+    }
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 5px;
+
+    &:hover {
+      background-color: crimson;
+    }
+  }
+}
+
+.bg {
+  padding: 5px;
+
+  &__violet {
+    background: blueviolet;
+  }
+
+  &__blue {
+    background: cornflowerblue;
+  }
+
+  &__teal {
+    background: teal;
+  }
+
+  &__khaki {
+    background: darkkhaki;
+  }
+}
