@@ -274,6 +274,7 @@ ol {
 
   &__info {
     width: 100%;
+    position: relative;
 
     @media (min-width: 1024px) {
       padding: 0 20px;
@@ -342,6 +343,10 @@ ol {
     + h2 {
       color: $pink;
       text-shadow: 2px 2px 1px $black;
+      position: absolute;
+      right: 20px;
+      top: 0;
+      margin: 0;
     }
   }
 

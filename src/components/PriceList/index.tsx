@@ -9,9 +9,9 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
     const [total, setTotal] = useState<number>(0);
     const [newData, setNewData] = useState(data || []);
     const [filteredArr, setFilteredArr] = useState<any>({});
-    // const [currency] = useState<string>('27');
+    const [currency] = useState<string>('27');
 
-    const getSum = useMemo(() => !!newData && newData.map((o: any) => +o.price).reduce((a: number, b: number) => Number(a) + Number(b), 0), [newData]);
+    const getSum = useMemo(() => !!newData && newData.map((o: any): number => +o.price).reduce((a: number, b: number) => Number(a) + Number(b), 0), [newData]);
 
     const groupBy = useCallback((arr: any, property: string) => {
         return arr.reduce((memo: Record<string, any>, x: any) => {
@@ -70,12 +70,14 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
     //     onChange(id);
     //     setIsEdit(true);
     // }
-    const getTotal = useCallback((arr: any[]) => arr.map((o: any) => +o.price).reduce((a: number, b: number) => Number(a) + Number(b), 0), []);
-
+    const getTotal = useCallback((arr: any[]): number => arr.map((o: any) => +o.price).reduce((a: number, b: number) => Number(a) + Number(b), 0), []);
+    const getConvertedMoney = useCallback((el: number): string => `${el || 0}₴ ~ ${Math.round(el / Number(currency))}$`, [currency]);
+    const setBgColor = (type: string): string => type === 'decoration' ? 'bg__violet' : type === 'street_construction' ? 'bg__teal' : type === 'documents' ? 'bg__khaki' : 'bg__blue';
+    
     return (
         user ? (<section className='dashboard__info'>
             <h1>Entries</h1>
-            <h2>Total: {total}$</h2>
+            <h2>Total: {getConvertedMoney(total)}</h2>
             <ol> 
                 <li><strong>Title</strong></li>
                 <li><strong>Count</strong></li>
@@ -89,12 +91,12 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
                 const title = el[0].split('_').join(' ');
 
                 return <div key={uid(i)} className='dashboard__content'>
-                    <h2>{title} <span style={{color: '#b92169'}}>( {getTotal(el[1]) || 0}$ )</span></h2>
-                    {el[1].map((item: any, k: number) => {
-                        return <ul key={uid(k)} className={`${item.type === 'decoration' ? 'bg__violet' : item.type === 'street_construction' ? 'bg__teal' : item.type === 'documents' ? 'bg__khaki' : 'bg__blue'}`}>
+                    <h2>{title} <span style={{color: '#b92169'}}>( {getConvertedMoney(getTotal(el[1]))} )</span></h2>
+                    {el[1] && el[1].map((item: any, k: number) => {
+                        return <ul key={uid(k)} className={setBgColor(item.type)}>
                             <li><span>{item.product}</span></li>
                             <li><span>{item.count}</span></li>
-                            <li><span>{item.price}$</span></li>
+                            <li><span>{getConvertedMoney(item.price)}</span></li>
                             <li><span>{new Date(+item.date * 1000).toLocaleDateString()}</span></li>
                             <li>
                                 <button onClick={() => removeEntry(item.id)}>Remove</button>
