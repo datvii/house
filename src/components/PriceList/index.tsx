@@ -1,4 +1,4 @@
-import moment from 'moment';
+// import moment from 'moment';
 import { useState, useEffect, useMemo, useCallback } from 'react'
 // import Entry from '../Entry'
 import { Props } from './interfaces';
@@ -9,7 +9,7 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
     const [total, setTotal] = useState<number>(0);
     const [newData, setNewData] = useState(data || []);
     const [filteredArr, setFilteredArr] = useState<any>({});
-    const [currency] = useState<string>('27');
+    // const [currency] = useState<string>('27');
 
     const getSum = useMemo(() => !!newData && newData.map((o: any) => +o.price).reduce((a: number, b: number) => Number(a) + Number(b), 0), [newData]);
 
@@ -25,56 +25,42 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
         }, {});
     }, []);
 
-    const usdRate = useCallback(() => {
-        // getRate().then(data => setCurrency(data));
-        const time = moment(new Date(), "DD/MM/YYYY HH:mm:ss");
-        const lsCurr = localStorage.getItem('currency');
-        const lsTime = localStorage.getItem('time');
-        const res = lsTime && moment.utc(time.diff(moment(lsTime,"DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss").split(':')[0];
-        console.log(currency, res);
+    // const usdRate = useCallback(() => {
+    //     // getRate().then(data => setCurrency(data));
+    //     const time = moment(new Date(), "DD/MM/YYYY HH:mm:ss");
+    //     const lsCurr = localStorage.getItem('currency');
+    //     const lsTime = localStorage.getItem('time');
+    //     const res = lsTime && moment.utc(time.diff(moment(lsTime,"DD/MM/YYYY HH:mm:ss"))).format("HH:mm:ss").split(':')[0];
+    //     console.log(currency, res);
 
-        if (lsTime && res && res >= '01') {
-            return;
-        } else {
-            if (lsCurr !== currency) {
-                localStorage.clear();
-                localStorage.setItem('currency', currency);
-                localStorage.setItem('time', time.toString());
-            }
-        }
-    }, [currency]);
+    //     if (lsTime && res && res >= '01') {
+    //         return;
+    //     } else {
+    //         if (lsCurr !== currency) {
+    //             localStorage.clear();
+    //             localStorage.setItem('currency', currency);
+    //             localStorage.setItem('time', time.toString());
+    //         }
+    //     }
+    // }, [currency]);
 
-    useEffect(() => {
-        usdRate();
-    }, [usdRate]);
+    // useEffect(() => {
+    //     usdRate();
+    // }, [usdRate]);
 
     useEffect(() => {
         getSum && setTotal(getSum);
     }, [newData, getSum]);
 
     useEffect(() => {
-        console.log(data, newData);
         setNewData(data);
     }, [data, newData]);
-    
+
     useEffect(() => {
         const arr = newData && groupBy(newData, 'type');
-        console.log(filteredArr && Object.keys(filteredArr).length, arr && Object.keys(arr).length);
-        if (arr && Object.keys(filteredArr).length !== Object.keys(arr).length) {
-            setFilteredArr(arr);
-        }
-        // const a = filteredArr && Object.entries(filteredArr).map((el: any, i: any) => {
-        //     console.log(el, i);
-        //     return el;
-        // })
-        // console.log(filteredArr);
-        console.log(filteredArr, arr);
-        
-    }, [filteredArr, groupBy, newData]);
-    
-    const checkUser = useMemo(() => {
-        return user?.includes('datvi') ? 'd' : 'a'
-    }, [user]);
+
+        arr && setFilteredArr(arr);
+    }, [groupBy, newData]);
 
     const removeEntry = (id: string) => {
         onRemove(id);
@@ -97,7 +83,7 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
                 <li><strong>Date</strong></li>
                 <li><strong>Client</strong></li>
             </ol>
-          
+            {!Object.keys(filteredArr).length && <h2>No entries!</h2>}
             {/* {isEdit && <Entry data={newData} isEdit={isEdit} />} */}
             {filteredArr && Object.entries(filteredArr).map((el: any, i: number) => {
                 const title = el[0].split('_').join(' ');
@@ -114,7 +100,7 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
                                 <button onClick={() => removeEntry(item.id)}>Remove</button>
                                 {/* <button onClick={() => editEntry(item.id)}>Edit</button> */}
                             </li>
-                            <li className={checkUser}><strong>{checkUser}</strong></li>
+                            <li className={item.user}><strong>{item.user}</strong></li>
                         </ul>
                     })}
                 </div>;

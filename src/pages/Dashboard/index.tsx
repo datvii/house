@@ -28,8 +28,15 @@ const Dashboard = () => {
   }, []);
   
   useEffect(() => {
-    getData()
+    if (isCreate) {
+      getData()
+      setIsCreate(false);
+    }
   }, [getData, isModal, isCreate]);
+
+  useEffect(() => {
+    getData()
+  }, [getData, isModal]);
 
   useEffect(() => {
     if (loading) {
@@ -56,7 +63,7 @@ const Dashboard = () => {
       <Header />
       <section className='dashboard'>
         <div className="container">
-          <Entry data={data} isEdit={false} onCreate={onCreateHandler} />
+          <Entry data={data} isEdit={false} onCreate={onCreateHandler} user={user ? user.email : ''} />
           <PriceList onRemove={onRemoveHandler} onChange={onChangeHandler} data={data} user={user ? user.email : ''} />
         </div>
       </section>

@@ -1,11 +1,15 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { collection, doc, setDoc } from "firebase/firestore"; 
 import { db } from '../../db/firebase';
 import { Props } from './interfaces';
 import { DataType } from '../PriceList/interfaces';
 
-const Entry = ({data, isEdit = false, onCreate}: Props) => {
-    const [formData, setFormData] = useState<DataType | { [key: string]: string | number }>({});
+const Entry = ({data, isEdit = false, onCreate, user}: Props) => {
+    const [formData, setFormData] = useState<DataType | { [key: string]: string | number }>({
+        count: '',
+        price: '',
+        product: '',
+    });
     const formRef = useRef<HTMLFormElement>(null);
     // const [edit] = useState<boolean>(isEdit || false);
     // const formRef = doc(collection(db, "house"));
@@ -14,15 +18,25 @@ const Entry = ({data, isEdit = false, onCreate}: Props) => {
         setFormData((formData) => ({
             ...formData,
             date: Math.round(+new Date() / 1000),
+            user: user && user.includes('anna') ? 'a' : 'd', 
             [e.target.name]: e.target.value
         }));
     }
 
+    const isEmpty = useMemo(() => !(formData.price && formData.count && formData.type && formData.product) ? true : false, [formData]);
+    
     const onClickHandler = () => {
+        if (isEmpty) return;
+
         setDoc(doc(collection(db, "house")), formData);
+        setFormData({
+            date: Math.round(+new Date() / 1000),
+            user: user && user.includes('anna') ? 'a' : 'd', 
+            count: '',
+            price: '',
+            product: '',
+        });
         onCreate(true);
-        
-        setFormData({});
         formRef.current && formRef.current.reset();
     }
 
@@ -34,10 +48,10 @@ const Entry = ({data, isEdit = false, onCreate}: Props) => {
                 <input type="radio" value="home_construction" name="type" id='house-3' /> <label htmlFor="house-3">Home construction</label><br />
                 <input type="radio" value="documents" name="type" id='house-4' /> <label htmlFor="house-4">Documents</label>
             </div>
-            <input type="text" required name="product" placeholder="Product" onChange={onChangeHandler}/>
-            <input type="number" required name="count" placeholder='Count' onChange={onChangeHandler} />
-            <input type="number" required name="price" placeholder='Price' onChange={onChangeHandler} />
-            <button type='button' onClick={() => onClickHandler()} disabled={formData.type ? false : true}>{true ? 'Add new entry' : 'Update Entry'}</button>
+            <input type="text" name="product" placeholder="Product" onChange={onChangeHandler}/>
+            <input type="number" name="count" placeholder='Count' onChange={onChangeHandler} />
+            <input type="number" name="price" placeholder='Price' onChange={onChangeHandler} />
+            <button type='button' onClick={() => onClickHandler()}>{true ? 'Add new entry' : 'Update Entry'}</button>
         </form>
     )
 }
