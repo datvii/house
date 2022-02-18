@@ -49,7 +49,7 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
     // }, [usdRate]);
 
     useEffect(() => {
-        getSum && setTotal(getSum);
+        (getSum || getSum === 0) && setTotal(getSum);
     }, [newData, getSum]);
 
     useEffect(() => {
@@ -77,7 +77,7 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
     return (
         user ? (<section className='dashboard__info'>
             <h1>Entries</h1>
-            <h2>Total: {getConvertedMoney(total)}</h2>
+            <h2 data-cy="total">Total: {getConvertedMoney(total)}</h2>
             <ol> 
                 <li><strong>Title</strong></li>
                 <li><strong>Count</strong></li>
@@ -90,7 +90,7 @@ const List = ({ /* onChange, */ onRemove, data, user }: Props) => {
             {filteredArr && Object.entries(filteredArr).map((el: any, i: number) => {
                 const title = el[0].split('_').join(' ');
 
-                return <div key={uid(i)} className='dashboard__content'>
+                return <div key={uid(i)} className='dashboard__content' data-cy="dashboard-content">
                     <h2>{title} <span style={{color: '#b92169'}}>( {getConvertedMoney(getTotal(el[1]))} )</span></h2>
                     {el[1] && el[1].map((item: any, k: number) => {
                         return <ul key={uid(k)} className={setBgColor(item.type)}>

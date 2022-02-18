@@ -26,7 +26,7 @@ const Header = () => {
     };
 
     return (
-        <header className='header'>
+        <header className='header' data-cy="header">
             <div className="container">
                 <strong className="header__logo">
                     <Link to="/">

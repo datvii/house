@@ -20,7 +20,7 @@ const ConfirmationModal = ({ close, id, updatedData }: Props) => {
     }
 
     return (
-        <div className='modal-confirmation'>
+        <div className='modal-confirmation' data-cy="modal-confirm">
             <h1>Are you sure?</h1>
             <button type='button' onClick={agree}>Yes</button>
             <button type='button' onClick={closeModal}>No</button>

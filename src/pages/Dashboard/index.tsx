@@ -61,7 +61,7 @@ const Dashboard = () => {
   return (
     <>
       <Header />
-      <section className='dashboard'>
+      <section className='dashboard' data-cy='dashboard'>
         <div className="container">
           <Entry data={data} isEdit={false} onCreate={onCreateHandler} user={user ? user.email : ''} />
           <PriceList onRemove={onRemoveHandler} onChange={onChangeHandler} data={data} user={user ? user.email : ''} />

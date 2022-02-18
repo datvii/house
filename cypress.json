@@ -1,0 +1,10 @@
+{
+    "video": false,
+    "baseUrl": "http://localhost:3000",
+    "redirectionLimit": 10,
+    "includeShadowDom": true,
+    "env": {
+        "email": "datvibenidze@gmail.com",
+        "pass": "Np83Zp84"
+    }
+}

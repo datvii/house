@@ -11,7 +11,6 @@ const Login = () => {
     const arr: number[] = Array.from(Array(40).keys());
 
     useEffect(() => {
-      console.log(user, error);
       if (user) history("/dashboard");
       if (error) console.error(error); 
     }, [error, history, user]);
@@ -32,7 +31,7 @@ const Login = () => {
     }
 
     return (
-      !user ? <div className="login" onDoubleClick={onClickHandler}>
+      !user ? <div className="login" data-cy='login' onDoubleClick={onClickHandler}>
         <ul className="login__animation">
           {arr.map((i: number) => {
             return <li key={i} className="login__animation__text">Dream House</li>

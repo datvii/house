@@ -23,11 +23,11 @@ const AuthModal = ({ login, close }: Props) => {
     }
 
     return (
-        <form className='modal'>
+        <form className='modal' data-cy="modal">
             <input onChange={onChangeHandler} type="text" name="email" placeholder='Email' />
             <input onChange={onChangeHandler} type="password" name="password" placeholder='Password' />
-            <button type='button' onClick={logIn}>Login</button>
-            <button type='button' onClick={closeModal}>Close</button>
+            <button type='button' data-cy="modal-login" onClick={logIn}>Login</button>
+            <button type='button' data-cy="modal-close" onClick={closeModal}>Close</button>
         </form>
     )
 }
